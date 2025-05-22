@@ -16,7 +16,7 @@ struct {
 	ALLEGRO_COLOR font_color;
 } display;
 
-void handle_mouse_clicks(ALLEGRO_EVENT event, float& x, float& y, ALLEGRO_FONT* font);
+void handle_mouse_clicks(ALLEGRO_EVENT event, float& x, float& y);
 
 int main() {
 
@@ -33,7 +33,7 @@ int main() {
 	ALLEGRO_FONT* font = NULL ;
 	font = al_load_font("04B_30__.TTF", 16, 0);
 	// Set initial font and background colors
-	display.bg_color = al_map_rgb(50, 255, 50);
+	display.bg_color = al_map_rgb(0, 0, 0);
 	display.font_color = al_map_rgb(50, 255, 50);
 
 	if (!screen) {
@@ -61,7 +61,7 @@ int main() {
 
 	while (true) {
 		// Clear previously drawn circle
-		al_clear_to_color(al_map_rgb(0, 0, 0));
+		al_clear_to_color(display.bg_color);
 		// Text will follow circle's every position
 		al_draw_text(font, display.font_color, circle_x, circle_y, ALLEGRO_ALIGN_CENTER, "Click to move the circle!");
 		// Draw circle at new position
@@ -71,7 +71,7 @@ int main() {
 		// Listener for event queue, specifically mouse clicks
 		al_wait_for_event(event_queue, &event);
 		// Process game logic for mouse click
-		handle_mouse_clicks(event, circle_x, circle_y, font);
+		handle_mouse_clicks(event, circle_x, circle_y);
 	}
 
 	al_destroy_display(screen);
@@ -81,7 +81,7 @@ int main() {
 }
 
 
-void handle_mouse_clicks(ALLEGRO_EVENT event, float& x, float& y, ALLEGRO_FONT* font) {
+void handle_mouse_clicks(ALLEGRO_EVENT event, float& x, float& y) {
 	// RGB color variables for easy reference
 	ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
 	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 50);
@@ -92,6 +92,31 @@ void handle_mouse_clicks(ALLEGRO_EVENT event, float& x, float& y, ALLEGRO_FONT* 
 		// Update circle position to mouse click position
 		x = event.mouse.x;
 		y = event.mouse.y;
+
+		// Change display colors based on position relative to origin
+		// If the circle is in the top right quadrant
+		if (x >= origin.x && y < origin.y) {
+			display.bg_color = black;
+			display.font_color = white;
+		}
+		// If the circle is in the bottom right quadrant
+		else if (x >= origin.x && y >= origin.y) {
+			display.bg_color = yellow;
+			display.font_color = blue;
+		}
+		// If the circle is in the bottom left quadrant
+		else if (x < origin.x && y >= origin.y) {
+			display.bg_color = blue;
+			display.font_color = yellow;
+		}
+		// If the circle is in the top left quadrant
+		else if (x < origin.x && y < origin.y) {
+			display.bg_color = white;
+			display.font_color = black;
+		}
+		
 	}
+
+
 }
 
