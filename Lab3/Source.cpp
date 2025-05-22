@@ -62,8 +62,9 @@ int main() {
 	while (true) {
 		// Clear previously drawn circle
 		al_clear_to_color(display.bg_color);
-		// Text will follow circle's every position
-		al_draw_text(font, display.font_color, circle_x, circle_y, ALLEGRO_ALIGN_CENTER, "Click to move the circle!");
+		// Text will follow circle and display it's numerical position
+		al_draw_textf(font, display.font_color, circle_x, circle_y, ALLEGRO_ALIGN_CENTER, 
+			"Circle positon at %.0f, %.0f", circle_x, circle_y);
 		// Draw circle at new position
 		al_draw_circle(circle_x, circle_y, 50, al_map_rgb(50, 255, 50), 5);
 		// Display the circle
